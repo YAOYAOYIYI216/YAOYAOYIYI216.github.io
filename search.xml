@@ -4,6 +4,25 @@
   
     
     <entry>
+      <title>闭包</title>
+      <link href="/2023/12/04/%E9%97%AD%E5%8C%85/"/>
+      <url>/2023/12/04/%E9%97%AD%E5%8C%85/</url>
+      
+        <content type="html"><![CDATA[<h2 id="闭包（Closure）"><a href="#闭包（Closure）" class="headerlink" title="闭包（Closure）"></a>闭包（Closure）</h2><h3 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h3><ol><li>避免变量全局污染</li><li>使数据私有化，外部无法修改内部数据</li><li>可以让外部可以使用内部的私有数据</li></ol><p>以上三点其实都是函数的作用，而不是闭包的独特作用</p><p>！闭包的核心作用是：使变量可以驻留在内存，不被回收</p><h3 id="代码讲解"><a href="#代码讲解" class="headerlink" title="代码讲解"></a>代码讲解</h3><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> a = <span class="number">10</span>;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">fn</span>(<span class="params"></span>)&#123;</span><br><span class="line">    a++;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(a);</span><br><span class="line">&#125;</span><br><span class="line"><span class="title function_">fn</span>();</span><br><span class="line"><span class="title function_">fn</span>();</span><br><span class="line"><span class="title function_">fn</span>();</span><br></pre></td></tr></table></figure><p>结果输出为11，12，13</p><p>但是此时a为全局变量，如果别人不小心对a又重复赋值了，那么结果就不是我们预期的结果</p><p>那此时我们就不让a成为全局变量，把a的定义放在函数内部，让a成为函数的私有变量</p><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">fn</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="keyword">let</span> a = <span class="number">10</span>;</span><br><span class="line">    a++;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(a);</span><br><span class="line">&#125;</span><br><span class="line"><span class="title function_">fn</span>();</span><br><span class="line"><span class="title function_">fn</span>();</span><br><span class="line"><span class="title function_">fn</span>();</span><br></pre></td></tr></table></figure><p>此时就可以满足上面提到的函数的作用（第三条只要加个return就可以实现）</p><p>但是问题出现了：这次的结果三次都为11，这是因为函数在执行完一次后里面的变量就会被释放掉，下一次执行时又会重新对a进行赋值，所以结果一直为11</p><h4 id="创建闭包"><a href="#创建闭包" class="headerlink" title="创建闭包"></a>创建闭包</h4><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">fn</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="keyword">let</span> a = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">function</span> <span class="title function_">b</span>(<span class="params"></span>)&#123;</span><br><span class="line">        a++;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(a);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> f = <span class="title function_">fn</span>();</span><br><span class="line"><span class="title function_">f</span>();</span><br></pre></td></tr></table></figure><p>条件：</p><ol><li>必须有个子函数 </li><li>子函数必须要调用父函数里面的变量</li></ol><p>实现自增的原因：</p><ol><li>执行的是f(),所以实际上执行的是子函数b，fn只在给f定义的时候执行了一次，所以后面let a &#x3D; 10也没有被执行</li><li>闭包函数内的变量可以保存下来</li></ol><p>我的疑惑：</p><ol><li>为什么要在下面重新定义一个f函数</li><li>为什么要加return       A ：1.因为要返回b函数？  2.最后f调用的是a变量，（如果外部想要使用闭包里面的变量，就要用return？）</li></ol><h3 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h3><h4 id="内存泄漏"><a href="#内存泄漏" class="headerlink" title="内存泄漏"></a>内存泄漏</h4><p>变量长时间驻留在内存，如果处理不当可能造成内存泄漏，所以用完可以手动清除</p><p>在最后加上下面的代码即可</p><figure class="highlight js"><table><tr><td class="code"><pre><span class="line">f = <span class="literal">null</span>;</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> js </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>this（普通函数）————初版</title>
       <link href="/2023/12/03/this%E6%99%AE%E9%80%9A%E5%87%BD%E6%95%B0/"/>
       <url>/2023/12/03/this%E6%99%AE%E9%80%9A%E5%87%BD%E6%95%B0/</url>
