@@ -13,49 +13,22 @@
     当前浏览器不支持canvas元素，请升级或更换浏览器！
   </canvas>
   <script>
-    // 获取Canvas
-    const canvas = document.getElementById('canvas');
-    // 获取绘制上下文
-    const ctx = canvas.getContext('2d');
-    // globalCompositeOperation 属性设置或返回如何将一个源（新的）图像绘制到目标（已有的）的图像上。
-    // 这里主要是为了让飞机压在运行轨迹上
-    ctx.globalCompositeOperation = 'destination-over';
-    const width = canvas.width
-    const height = canvas.height
-    let num = 0
-    ctx.strokeStyle = "#ccc"
-    const img = new Image()
-    img.src = "data:image/jpeg;base64,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"
-    img.onload = () => {
-      requestAnimationFrame(planeRun);
-    }
-    function planeRun() {
-      // 清空画布
-      ctx.clearRect(0, 0, width, height)
+    const canvas = document.getElementById('canvas'); // 获取Canvas
+    const ctx = canvas.getContext('2d'); // 获取绘制上下文
 
-      // 保存画布状态
-      ctx.save();
-
-      // 把原心移到画布中间
-      ctx.translate(250, 250);
-
-      // 绘制飞机和飞机动画
-      num += 0.01
-      ctx.rotate(-num);
-      ctx.translate(0, 200);
-      ctx.drawImage(img, -20, -25, 40, 40);
-
-      // 恢复状态
-      ctx.restore();
-
-      // 飞机运行的轨迹
-      ctx.beginPath();
-      ctx.arc(250, 250, 200, 0, Math.PI * 2, false);
-      ctx.stroke();
-
-      // 执行完以后继续调用
-      requestAnimationFrame(planeRun);
-    }
+    ctx.fillStyle = "gray";
+    
+    ctx.fillRect(10, 10, 200, 100);
+    // 保存状态
+    ctx.save();
+    ctx.fillStyle = "orange";
+    ctx.translate(250, 250)
+    ctx.fillRect(10, 10, 200, 100);
+    // 恢复上次保存的状态
+    ctx.restore();
+    // ctx.translate(10,10)
+    // ctx.fillStyle = "black"
+    ctx.fillRect(10, 300, 200, 200);
   </script>
 </body>
 
